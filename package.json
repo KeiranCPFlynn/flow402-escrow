@@ -1,0 +1,29 @@
+{
+  "name": "@flow402/contracts",
+  "version": "0.0.0",
+  "description": "Flow402 treasury contract artifacts",
+  "main": "dist/abi/Flow402Treasury.json",
+  "files": [
+    "dist/abi",
+    "deployments"
+  ],
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test"
+  },
+  "keywords": [
+    "flow402",
+    "treasury",
+    "contracts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flow402/flow402-escrow.git"
+  },
+  "author": "Flow402",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "ethers": "^5.8.0"
+  }
+}

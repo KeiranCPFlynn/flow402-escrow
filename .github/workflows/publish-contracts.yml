@@ -1,0 +1,43 @@
+name: Publish Contracts
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Build & test
+        run: |
+          forge build
+          forge test
+
+      - name: Sync ABI artifact
+        run: |
+          mkdir -p dist/abi
+          jq '{abi: .abi}' out/Flow402Treasury.sol/Flow402Treasury.json > dist/abi/Flow402Treasury.json
+
+      - name: Set package version from tag
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          npm version "$VERSION" --no-git-tag-version
+
+      - name: Publish package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
