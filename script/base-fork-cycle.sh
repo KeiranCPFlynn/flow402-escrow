@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+export RPC_URL=${RPC_URL:-http://127.0.0.1:8545}
+export FLOW_CHAIN_ID=${FLOW_CHAIN_ID:-84532}
+export DEPLOYMENT_FILENAME=${DEPLOYMENT_FILENAME:-deployment.base-fork.json}
+export FLOW_ENV_FILE=${FLOW_ENV_FILE:-../flow402-credits/apps/web/.env.base-fork}
+export ENV_USDC_KEY=${ENV_USDC_KEY:-NEXT_PUBLIC_BASE_FORK_USDC_ADDRESS}
+export ENV_TREASURY_KEY=${ENV_TREASURY_KEY:-NEXT_PUBLIC_BASE_FORK_TREASURY_ADDRESS}
+export ENV_VENDOR_KEY=${ENV_VENDOR_KEY:-NEXT_PUBLIC_BASE_FORK_VENDOR_ADDRESS}
+export ENV_RPC_KEY=${ENV_RPC_KEY:-NEXT_PUBLIC_BASE_FORK_RPC_URL}
+
+"$SCRIPT_DIR/local-cycle.sh"

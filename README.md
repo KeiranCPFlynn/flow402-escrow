@@ -87,6 +87,12 @@ After deploy:
 
 - **Automated tests**: `forge test` (covers deposit, permit, permit2, batch settlement, withdrawals, admin guards, and failure modes).  
 - **Custom scenarios**: run `anvil`, deploy a mock USDC + Flow402Treasury pair (or fork Base Sepolia) and exercise deposits via wallet/SDK by pointing `USDC_ADDRESS` at your local token and reusing the deploy script.  
+- **Base Sepolia fork**:
+  1. `export BASE_SEPOLIA_RPC_URL=<alchemy/infura url>`  
+  2. Start the forked node on chain id 84532: `./script/start-base-fork.sh` (knobs: `BASE_FORK_BLOCK_NUMBER`, `BASE_FORK_PORT`, `BASE_FORK_BLOCK_TIME`).  
+  3. In a new terminal run `./script/base-fork-cycle.sh` to deploy MockUSDC + Flow402Treasury onto the fork, mint anvil test balances, and write `deployment.base-fork.json` + `.env.base-fork` for the `flow402-credits` repo (`NEXT_PUBLIC_BASE_FORK_*` env vars).  
+  4. Point your wallet/tests at `http://127.0.0.1:8545` (ex: `forge test --fork-url http://127.0.0.1:8545 --match-test Permit2`). `anvil --auto-impersonate` is enabled, so `cast rpc anvil_impersonateAccount '["0x..."]'` lets you simulate live Base Sepolia accounts.  
+  5. Stop the fork with `Ctrl+C` when finished; rerun the scripts to reset state.  
 - **Coverage / debug**: `forge test -vvv --match-test <name>` or `forge coverage` as needed.
 
 6. Integration Boundary
