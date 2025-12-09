@@ -236,6 +236,31 @@ contract Flow402Treasury is Ownable, ReentrancyGuard {
         _afterFundsArrived(user, amount, spendingLimit);
     }
 
+    /// @notice Deposit using Permit2 AllowanceTransfer (reusable allowances)
+    /// @dev User must have previously activated a Permit2 allowance for this contract
+    /// @param user The user depositing credits
+    /// @param amount Gross USDC amount (before fee)
+    /// @param spendingLimit Max amount per settlement batch
+    function depositWithAllowanceTransfer(
+        address user,
+        uint256 amount,
+        uint256 spendingLimit
+    ) external nonReentrant {
+        if (amount == 0 || spendingLimit == 0) revert InvalidAmount();
+        if (amount > type(uint160).max) revert InvalidAmount();
+
+        // Pull tokens using the activated Permit2 allowance
+        // The user must have previously called permit() on Permit2 to authorize this contract
+        IPermit2(PERMIT2).transferFrom(
+            user,
+            address(this),
+            uint160(amount),
+            address(usdc)
+        );
+
+        _afterFundsArrived(user, amount, spendingLimit);
+    }
+
     /// @notice Internal accounting for deposit flows once funds are held by treasury
     function _afterFundsArrived(
         address user,
