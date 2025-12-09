@@ -46,4 +46,17 @@ contract MockPermit2 is IPermit2 {
             transferDetails.requestedAmount
         );
     }
+
+    function transferFrom(
+        address from,
+        address to,
+        uint160 amount,
+        address token
+    ) external override {
+        if (to == address(0)) revert("Permit2: invalid to");
+        if (token == address(0)) revert("Permit2: invalid token");
+        if (amount == 0) revert("Permit2: zero amount");
+
+        IERC20Minimal(token).transferFrom(from, to, amount);
+    }
 }

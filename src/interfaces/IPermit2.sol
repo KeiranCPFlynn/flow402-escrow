@@ -24,4 +24,16 @@ interface IPermit2 {
         address owner,
         bytes calldata signature
     ) external;
+
+    /// @notice Transfer tokens using an activated Permit2 allowance
+    /// @param from The address to transfer from
+    /// @param to The address to transfer to
+    /// @param amount The amount to transfer (uint160)
+    /// @param token The token address
+    function transferFrom(
+        address from,
+        address to,
+        uint160 amount,
+        address token
+    ) external;
 }
